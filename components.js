@@ -1,4 +1,5 @@
-
+require('./assets/scss/index.scss')
+require('./assets/css/index.css')
 import Vue from 'vue';
 
 
