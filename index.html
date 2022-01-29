@@ -10,9 +10,19 @@
   <body>
    
     <div id="app">
-<main-component> </main-component>
+        <the-header></the-header>
+        <div class="flex-grow">
+            <main-component> </main-component>
+        </div>
+
 
           </div>
     <!-- built files will be auto injected -->
   </body>
 </html>
+<script>
+    import TheHeader from "./components/common/TheHeader";
+    export default {
+        components: {TheHeader}
+    }
+</script>
