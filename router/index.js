@@ -3,8 +3,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 Vue.use(Router)
 import UserLogin from "../components/UserLogin";
-import index from "../components/index";
 import UserRegistration from "../components/UserRegistration";
+import index from "../components/index";
 
 const router =  new Router({
     routes: [

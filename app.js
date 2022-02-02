@@ -8,12 +8,13 @@ import './components'
 import ElementUI from "element-ui";
 Vue.use(ElementUI);
 
-import Router from 'vue-router'
-Vue.use(Router)
 
 import store from './store/index'
+import router from "./router";
+
+
 new Vue({
     el: '#app',
-    Router,
+    router,
     store
 })

@@ -4,6 +4,7 @@
       <router-link to="/">Home</router-link>
       <router-link :to="{name:'login'}">Login</router-link>
       <router-link :to="{name:'register'}">Register</router-link>
+
     </div>
   </div>
 </template>
@@ -16,7 +17,7 @@ export default {
 
 <style scoped>
 .navigation{
-  background-color:black;
+  background-color:rgb(193,165,93);
   color:white;
   font-size:18px;
   width:100%  !important;
