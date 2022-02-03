@@ -1,4 +1,4 @@
-
+// const subscription =require('../models/subscriptions')
 const {DataTypes} = require('sequelize');
 const sequelize = require('../config/database');
 const movie = sequelize.define('movies', {
@@ -15,6 +15,11 @@ const movie = sequelize.define('movies', {
     image_path: DataTypes.INTEGER,
     status: DataTypes.STRING,
 });
+
+
+// movie.hasMany(subscription, {
+//     foreignKey: 'movie_id',onDelete: 'CASCADE'
+// });
 
 //export
 module.exports = movie;

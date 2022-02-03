@@ -8,16 +8,20 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
+
 //exports
 const sequelize = require('../../config/database');
 const user = require('../../models/users');
-
+const { Op } = require("sequelize");
 const movie = require('../../models/movies');
+const subscription = require('../../models/subscriptions');
+
+const favourite = require('../../models/favourites');
 //synchronize table on new changes
-// sequelize.sync({
-//     force: true,
-//     logging: console.log
-// })
+sequelize.sync({
+    alter: true,
+    logging: console.log
+})
 
 
 var bodyParser = require('body-parser');
@@ -259,6 +263,214 @@ app.get('/api/v1/movies', async (req, res, next) => {
         })
     }
 });
+
+
+app.post('/api/v1/movie/search/', async (req, res) => {
+
+    const name = req.body.name;
+    try {
+        let searchMovie = await movie.findAll({
+            where:
+                    { 'name': { [Op.like]: '%' + name + '%' }}
+
+        });
+
+        if(searchMovie.length ==0){
+            res.send('No movie found  with the serach');
+        }else{
+            res.send(searchMovie);
+        }
+
+
+
+    } catch (error) {
+        return res.status(500).json({
+            'message': error.message
+        })
+    }
+})
+
+
+app.post('/api/v1/movie/subscribe/', async (req, res) => {
+
+    const userId = req.body.user_id;
+    const movieId = req.body.movie_id;
+    try {
+
+        let findMovie = await movie.findOne({where: {id: movieId}});
+        if(!findMovie) {
+            return res.status(500).json({
+                'message': "Movie not found"
+            })
+        }else{
+            subscription.create({
+                'movie_id': movieId,
+                'user_id': userId,
+            })
+
+            res.send("Subscribed for updates  successfully");
+        }
+
+    } catch (error) {
+        return res.status(500).json({
+            'message': error.message
+        })
+    }
+})
+
+
+app.post('/api/v1/movie/un-subscribe/', async (req, res) => {
+
+    const userId = req.body.user_id;
+    const movieId = req.body.movie_id;
+    try {
+
+        let findMovie = await movie.findOne({where: {id: movieId}});
+        if(!findMovie) {
+            return res.status(500).json({
+                'message': "Movie not found"
+            })
+        }else{
+             await subscription.destroy({
+                where: {
+                    user_id: userId,
+                    movie_id: movieId
+                }
+            });
+
+            res.send("Unsubscribed succesfully");
+        }
+
+
+    } catch (error) {
+        return res.status(500).json({
+            'message': error.message
+        })
+    }
+})
+
+
+
+
+
+
+
+
+app.get('/api/v1/movie/my-subscriptions/:id', async (req, res) => {
+
+    const id = req.params.id;
+    try {
+
+        let mySubscriptions = await subscription.findAll({
+            where: {user_id: id} ,
+            include: [
+                {'model': movie,user
+                }
+            ]
+        });
+        if(!mySubscriptions) {
+            return res.status(200).json({
+                'message': "You have no subscriptions"
+            })
+        }else{
+            res.send(mySubscriptions);
+        }
+
+
+    } catch (error) {
+        return res.status(500).json({
+            'message': error.message
+        })
+    }
+})
+
+
+app.post('/api/v1/movie/favourite/', async (req, res) => {
+
+    const userId = req.body.user_id;
+    const movieId = req.body.movie_id;
+    try {
+
+        let findMovie = await movie.findOne({where: {id: movieId}});
+        if(!findMovie) {
+            return res.status(200).json({
+                'message': "Movie not found"
+            })
+        }else{
+            favourite.create({
+                'movie_id': movieId,
+                'user_id': userId,
+            })
+
+            res.send("Movie added to your favourite list  successfully");
+        }
+
+
+    } catch (error) {
+        return res.status(500).json({
+            'message': error.message
+        })
+    }
+})
+
+
+
+app.get('/api/v1/movie/my-favourites/:id', async (req, res) => {
+
+    const id = req.params.id;
+    try {
+
+        let myFavourites = await favourite.findAll({
+            where: {user_id: id} ,
+            include: [
+                {'model': movie}
+            ]
+        });
+        if(!myFavourites) {
+            return res.status(200).json({
+                'message': "You have no favourite movie"
+            })
+        }else{
+            res.send(myFavourites);
+        }
+
+    } catch (error) {
+        return res.status(500).json({
+            'message': error.message
+        })
+    }
+})
+
+
+app.get('/api/v1/movie/active-subscriptions', async (req, res) => {
+
+
+    try {
+
+        let favourites = await favourite.findAll({
+            include: [
+                {'model': movie}
+            ]
+        });
+        if(!favourites) {
+            return res.status(200).json({
+                'message': "You have no active subscriptions"
+            })
+        }else{
+            res.send(favourites);
+        }
+
+    } catch (error) {
+        return res.status(500).json({
+            'message': error.message
+        })
+    }
+})
+
+
+
+
+
 
 
 app.listen(port, () => {
