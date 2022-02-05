@@ -1,7 +1,7 @@
 const {DataTypes} = require('sequelize');
 const sequelize = require('../config/database');
-const movie = require("../models/movies");
-const user = require("../models/users");
+const movie = require("../models/movie");
+const user = require("../models/user");
 const favourite = sequelize.define('favourites', {
     id: {
         type: DataTypes.INTEGER,

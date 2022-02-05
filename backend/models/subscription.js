@@ -1,8 +1,8 @@
-const movie =require('../models/movies')
-const user =require('../models/users')
+const movie =require('../models/movie')
+const user =require('../models/user')
 const {DataTypes} = require('sequelize');
 const sequelize = require('../config/database');
-const subscription = sequelize.define('subscriptions', {
+const subscriptions = sequelize.define('subscriptions', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -13,13 +13,14 @@ const subscription = sequelize.define('subscriptions', {
     user_id: DataTypes.INTEGER,
 });
 
-subscription.belongsTo(movie, {
+subscriptions.belongsTo(movie, {
     foreignKey: 'movie_id' ,onDelete: 'CASCADE'
 });
 
-subscription.belongsTo(user, {
+
+subscriptions.belongsTo(user, {
     foreignKey: 'user_id' ,onDelete: 'CASCADE'
 });
 
 //export
-module.exports = subscription;
+module.exports = subscriptions;

@@ -1,4 +1,7 @@
-// const subscription =require('../models/subscriptions')
+const rating =require('../models/rating');
+const comment =require('../models/comment');
+const actor =require('../models/actor');
+const episode =require('../models/episode');
 const {DataTypes} = require('sequelize');
 const sequelize = require('../config/database');
 const movie = sequelize.define('movies', {
@@ -16,10 +19,23 @@ const movie = sequelize.define('movies', {
     status: DataTypes.STRING,
 });
 
+movie.hasMany(rating, {
+    foreignKey: 'movie_id' ,onDelete: 'CASCADE'
+});
 
-// movie.hasMany(subscription, {
-//     foreignKey: 'movie_id',onDelete: 'CASCADE'
-// });
+movie.hasMany(comment, {
+    foreignKey: 'movie_id' ,onDelete: 'CASCADE'
+});
+
+
+
+movie.hasMany(episode, {
+    foreignKey: 'movie_id' ,onDelete: 'CASCADE'
+});
+
+movie.hasMany(actor, {
+    foreignKey: 'movie_id' ,onDelete: 'CASCADE'
+});
 
 //export
 module.exports = movie;
