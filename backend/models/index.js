@@ -7,5 +7,4 @@ const actors = require('./actor')
 const comments = require('./comment')
 const ratings = require('./rating')
 const favourites = require('./favourite')
-
 module.exports = {users, subscriptions, movie, genre, episode, actors, comments, ratings, favourites}

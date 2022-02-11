@@ -1,11 +1,20 @@
 const movie = require("../../models/movie");
 const subscription = require("../../models/subscription");
 const user = require("../../models/user");
-const favourite = require("../../models/favourite");
 exports.subscribeToMovie =async (req, res) => {
 
-    const userId = req.body.user_id;
-    const movieId = req.body.movie_id;
+    const userId = req.body.userId;
+    const movieId = req.params.id;
+
+    let mySubscriptions = await subscription.findAll({
+        where: {user_id: userId, movie_id:movieId} ,
+    });
+    if(mySubscriptions.length >= 1){
+        return res.status(500).json({
+            'message': "Movie Already added to your subscriptions list"
+        })
+    }
+
     try {
 
         let findMovie = await movie.findOne({where: {id: movieId}});
@@ -19,7 +28,9 @@ exports.subscribeToMovie =async (req, res) => {
                 'user_id': userId,
             })
 
-            res.send("Subscribed for updates  successfully");
+            return res.status(200).json({
+                'message': "Subscribed for updates  successfully"
+            })
         }
 
     } catch (error) {
@@ -62,7 +73,7 @@ exports.unsubscribeFromMovie = async (req, res) => {
 
 exports.mySubscriptions = async (req, res) => {
 
-    const id = req.params.id;
+    const id = req.body.userId;
     try {
 
         let mySubscriptions = await subscription.findAll({
@@ -77,6 +88,7 @@ exports.mySubscriptions = async (req, res) => {
                 'message': "You have no subscriptions"
             })
         }else{
+
             res.send(mySubscriptions);
         }
 

@@ -1,5 +1,6 @@
 const user = require("../../models/user");
 const bcrypt = require("bcrypt");
+const genre = require("../../models/genre");
 
 exports.createUser =async (req, res, next) => {
     const userData = req.body;
@@ -12,19 +13,23 @@ exports.createUser =async (req, res, next) => {
             })
         }
 
-        let randomPassword = createPassword(8);
+        // let randomPassword = createPassword(8);
+        let randomPassword = 'user123456';
         let randomHashedPassword = bcrypt.hashSync(randomPassword, 2);
         user.create({
             'name': userData.name,
             'tel': userData.tel,
             'email': userData.email,
-            'id_number': userData.id_number,
             'password': randomHashedPassword,
             'role_id': 2,
             'status': 'active',
         })
 
-        res.json(randomPassword);
+        return res.status(200).json({
+            'message':'user created successfully', user:user
+        })
+
+
     } catch (error) {
         return res.status(500).json({
             'message': error.message
@@ -55,4 +60,24 @@ exports.getUsers= async (req, res, next) => {
         })
     }
 
+}
+
+exports.deleteUser=async (req, res) => {
+
+    const id=req.params.id;
+    try {
+        await user.destroy(
+            {
+                where:{
+                    id:id
+                }
+            }
+        )
+        res.send("User deleted successfully");
+
+    }catch (error) {
+        return res.status(500).json({
+            'message': error.message
+        })
+    }
 }

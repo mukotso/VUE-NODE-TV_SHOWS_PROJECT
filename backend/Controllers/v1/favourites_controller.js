@@ -1,15 +1,27 @@
 const movie = require("../../models/movie");
 const favourite = require("../../models/favourite");
 const user = require("../../models/user");
+const subscription = require("../../models/subscription");
 exports.createFavourite= async (req, res) => {
 
-    const userId = req.body.user_id;
-    const movieId = req.body.movie_id;
+    const userId = req.body.userId;
+    const movieId = req.params.id;
+
+    let myFavourites = await favourite.findAll({
+        where: {user_id: userId, movie_id:movieId} ,
+    });
+    if(myFavourites.length >= 1){
+        return res.status(500).json({
+            'message': "Movie Already added to favourites list"
+        })
+
+    }
+
     try {
 
         let findMovie = await movie.findOne({where: {id: movieId}});
         if(!findMovie) {
-            return res.status(200).json({
+            return res.status(500).json({
                 'message': "Movie not found"
             })
         }else{
@@ -31,7 +43,8 @@ exports.createFavourite= async (req, res) => {
 
 exports.myFavourites= async (req, res) => {
 
-    const id = req.params.id;
+    // const id = req.params.id;
+    const id = req.body.userId;
     try {
 
         let myFavourites = await favourite.findAll({
@@ -48,6 +61,30 @@ exports.myFavourites= async (req, res) => {
         }else{
             res.send(myFavourites);
         }
+
+    } catch (error) {
+        return res.status(500).json({
+            'message': error.message
+        })
+    }
+}
+
+exports.removeMovieFromFavourites = async (req, res) => {
+
+    const userId = req.body.userId;
+    const movieId = req.params.id;
+    try {
+
+
+            await favourite.destroy({
+                where: {
+                    user_id: userId,
+                    movie_id: movieId
+                }
+            });
+
+            res.send("Movie Removed from favourites Successfully");
+
 
     } catch (error) {
         return res.status(500).json({

@@ -1,4 +1,4 @@
-const user = require("../../models/user");
+const User = require("../../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -7,7 +7,7 @@ exports.login =async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-        let findUser = await user.findOne({where: {email: email}});
+        let findUser = await User.findOne({where: {email: email}});
 
 
         if (!findUser) {
@@ -27,12 +27,12 @@ exports.login =async (req, res) => {
             email: findUser.email,
             userId: findUser.id
         }, 'secret')
-
-        delete user['password'];
+         let loggedInUser=findUser;
+        delete loggedInUser['password'];
 
         return res.status(200).json({
             token,
-            user
+            loggedInUser
         })
     } catch (error) {
         return res.status(500).json({
@@ -46,25 +46,26 @@ exports.login =async (req, res) => {
 exports.register =async (req, res, next) => {
     const userData = req.body;
 
+
     let hashedPassword = await bcrypt.hashSync(req.body.password, 2);
-    let findEmail = await user.findOne({where: {email: userData.email}});
+    let findEmail = await User.findOne({where: {email: userData.email}});
     if(findEmail){
         return res.status(500).json({
             'message': "Email already registered to the system"
         })
     }
     try {
-        user.create({
+        User.create({
             'name': userData.name,
             'tel': userData.tel,
             'email': userData.email,
-            'id_number': userData.id_number,
             'password': hashedPassword,
             'role_id': 2,
             'status': 'active',
         })
-
-        res.send('User added to database successfully');
+        return res.status(200).json({
+            'message': "Registration Successfull"
+        })
     } catch (error) {
         return res.status(500).json({
             'message': error.message

@@ -1,5 +1,9 @@
 
 const genre = require("../../models/genre");
+const rating = require("../../models/rating");
+const comment = require("../../models/comment");
+const episode = require("../../models/episode");
+const movie = require("../../models/movie");
 exports.createGenre =async (req, res) => {
 
     const genreData=req.body;
@@ -20,7 +24,13 @@ exports.createGenre =async (req, res) => {
 
 exports.viewGenres = async ( req,res)=>{
     try{
-        const activeGenre = await genre.findAll({where:{status:"active"}})      ;
+        const activeGenre = await genre.findAll({
+            where:{status:"active"},
+            include: [
+                {'model': movie},
+            ]
+        }) ;
+
         return res.send(activeGenre);
 
     }  catch (error)  {
@@ -29,12 +39,6 @@ exports.viewGenres = async ( req,res)=>{
         })
     }
 }
-
-
-
-
-
-
 
 exports.deleteGenre=async (req, res) => {
 
@@ -69,7 +73,11 @@ exports.deleteGenre=async (req, res) => {
                 id: id
             }
         });
-        res.send("genre updated successfully");
+        let updatedGenre = await genre.findOne({where: {id: id}});
+
+        return res.status(200).json({
+            genre:updatedGenre
+        })
 
     }catch (error) {
         return res.status(500).json({

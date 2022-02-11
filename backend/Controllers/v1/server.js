@@ -29,7 +29,6 @@ sequelize.sync({
     logging: console.log
 })
 
-
 var bodyParser = require('body-parser');
 
 // Put these statements before you define any routes.

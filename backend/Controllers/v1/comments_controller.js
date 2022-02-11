@@ -5,15 +5,16 @@ const movie = require("../../models/movie");
 exports.createComment =async (req, res) => {
 
     const commentData = req.body;
+    const movieId=req.params.id;
 
-    let isCommented = await comment.findOne({where: {user_id: commentData.userId, movie_id: commentData.movieId}});
-    let findMovie = await movie.findOne({where: {id: commentData.movieId}});
+    // let isCommented = await comment.findOne({where: {user_id: commentData.userId, movie_id: commentData.movieId}});
+    let findMovie = await movie.findOne({where: {id:movieId}});
 
-    if (isCommented) {
-        return res.status(200).json({
-            'message': "You have already commented on the movie"
-        })
-    }
+    // if (isCommented) {
+    //     return res.status(200).json({
+    //         'message': "You have already commented on the movie"
+    //     })
+    // }
     if(!findMovie){
         res.send("Movie not found");
     }
@@ -21,7 +22,7 @@ exports.createComment =async (req, res) => {
         comment.create({
             'comment': commentData.comment,
             'user_id': commentData.userId,
-            'movie_id': commentData.movieId
+            'movie_id': movieId
         })
         res.send("Comment added Succesfully");
 

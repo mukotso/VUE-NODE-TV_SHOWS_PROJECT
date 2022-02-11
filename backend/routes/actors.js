@@ -5,7 +5,7 @@ const {createActor, deleteActor, updateActor} = require('../controllers/v1/actor
 
 
 
-router.post('/create', createActor);
+router.post('/create/:id', createActor);
 router.post('/update/:id',  updateActor);
 router.get('/delete/:id',  deleteActor);
 

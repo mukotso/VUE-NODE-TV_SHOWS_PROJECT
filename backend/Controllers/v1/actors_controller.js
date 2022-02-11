@@ -6,11 +6,9 @@ exports.createActor = async (req, res) => {
     const movieId =req.params.id;
     try {
         actor.create({
+            'description':actorData.description,
             'name':actorData.name,
-            'avatar':actorData.avatar,
-            'age':actorData.age,
             'movie_id':movieId,
-            'place_of_birth':actorData.place_of_birth,
         })
         res.send("Actor added Succesfully");
 

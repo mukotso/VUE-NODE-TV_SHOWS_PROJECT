@@ -16,11 +16,9 @@ exports.createEpisode = async (req, res) => {
     })
     try {
         episode.create({
-            'title':episodeData.title,
             'description':episodeData.description,
-            'episode_number':episodeData.episode_number,
-            'movie_id':movieId,
             'trailer_link':episodeData.trailer_link,
+            'movie_id':movieId,
         })
 
         // let subscribedUsers= await  subscription.findAll({where:{
@@ -35,7 +33,7 @@ exports.createEpisode = async (req, res) => {
         // return res.send(newEmail);
         // var mailOptions = {
         //     from: '"Balozi Movies and Shows Team" <balozimovies@example.com>',
-        //     subject: 'LACASA SEASON  EPISODE 19 ADDED',
+        //     subject: 'LACASA SEASONEPISODE 19 ADDED',
         //     to: subscribedEmails,
         //     html:'<p>episodeData.title</p>',
         //     html: 'Watch the full trailer from the link below <br> <button style="background-color: darkolivegreen" >Trailer Link</button> <br> Regards Balozi movies and series',

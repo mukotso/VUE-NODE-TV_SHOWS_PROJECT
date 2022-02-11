@@ -1,6 +1,7 @@
 
 const {DataTypes} = require('sequelize');
 const sequelize = require('../config/database');
+const user = require("../models/user");
 const comment = sequelize.define('comments', {
     id: {
         type: DataTypes.INTEGER,
@@ -14,6 +15,9 @@ const comment = sequelize.define('comments', {
 });
 
 
+comment.belongsTo(user, {
+    foreignKey: 'user_id' ,onDelete: 'CASCADE'
+});
 
 //export
 module.exports = comment;

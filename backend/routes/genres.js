@@ -5,7 +5,7 @@ const {createGenre, viewGenres, updateGenre, deleteGenre} = require('../controll
 
 router.get('/',  viewGenres)
 router.post('/create',  createGenre);
-router.post('/update/:id',  updateGenre);
-router.get('/delete/:id',  deleteGenre)
+router.put('/update/:id',  updateGenre);
+router.delete('/delete/:id',  deleteGenre)
 
 module.exports = router;

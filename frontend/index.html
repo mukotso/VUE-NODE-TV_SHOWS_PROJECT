@@ -5,24 +5,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-    <title></title>
+    <title>MOVIES TRACKER</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" charSet="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
+
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.3.3/dist/flowbite.min.css" />
+
+
 </head>
 <body>
 
 <div id="app">
     <div class="flex-grow">
+        <nav-bar></nav-bar>
         <main-component></main-component>
     </div>
 
 
 </div>
-<!-- built files will be auto injected -->
+<script src="https://unpkg.com/flowbite@1.3.3/dist/flowbite.js"></script>
 </body>
 </html>
 <script>
-    import TheHeader from "./frontend/components/common/TheHeader";
+    $(document).ready(function () {
+        $('#dataTable').DataTable();
 
-    export default {
-        components: {TheHeader}
-    }
+    });
+
+
+
 </script>

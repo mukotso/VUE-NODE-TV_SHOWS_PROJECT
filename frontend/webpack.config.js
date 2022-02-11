@@ -11,6 +11,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "dist"),
+      publicPath: '/'
   },
   module: {
     rules: [
@@ -25,14 +26,16 @@ module.exports = {
         test: /\.vue$/,
         loader: "vue-loader",
       },
-
         {
             test: /\.(png|jp(e*)g|svg)$/,
             use: [{
-                loader: 'url-loader',
+                loader: 'file-loader',
                 options: {
-                    limit: 8000, // Convert images < 8kb to base64 strings
-                    name: '/assets/images/[name].[ext]'
+                    name: '[name].[ext]',
+                    outputPath: 'assets/images/',
+                    publicPath: 'assets/images/',
+                    esModule: false,
+                    useRelativePaths: false
                 }
             }]
         },
